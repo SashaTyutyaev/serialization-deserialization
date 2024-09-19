@@ -1,25 +1,27 @@
 package user.service;
 
+import user.constants.UsersList;
 import user.model.User;
 
 import java.io.*;
 
-public class SingleUserService {
+public class SingleUserService implements SerializationService {
 
     private static final String PATH = "./src/main/resources/users.txt";
 
-    public void serializeUser(User user) {
+    @Override
+    public void serialize(User... user) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PATH))) {
-            oos.writeObject(user);
+            oos.writeObject(user[0]);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void deserializeUser() {
-        User deserializedUser = null;
+    @Override
+    public void deserialize() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(PATH))) {
-            deserializedUser = (User) ois.readObject();
+            User deserializedUser = (User) ois.readObject();
             System.out.println(deserializedUser);
         } catch (IOException e) {
             throw new RuntimeException(e);
